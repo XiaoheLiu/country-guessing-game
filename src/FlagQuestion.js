@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-// import FlagChoices from './FlagChoices';
-// import FlagAnswer from './FlagAnswer';
-import './FlagQuestion.css';
 import FlagChoices from './FlagChoices';
+import FlagAnswer from './FlagAnswer';
+import './FlagQuestion.css';
 
 const QuestionStates = {
     QUESTION: 1,
@@ -20,23 +19,43 @@ class FlagQuestion extends Component {
         this.state = {
             userChoice: undefined
         }
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(e) {
+        this.setState({userChoice: Number(e.target.value)});
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        this.props.onGuess(this.state.userChoice);
     }
 
     render() {
         const {
             flag,
-            // questionState,
+            questionState,
             options,
             answerText,
-            // onText
+            // onNext
         } = this.props;
+        const {userChoice} = this.state;
+        let opts = options.map(opt => ({
+            ...opt,
+            checked: userChoice === opt.id
+        }));
+        let output = questionState === QuestionStates.QUESTION ?
+            ( <FlagChoices options={opts}
+                           handleChange={this.handleChange}
+                           handleSubmit={this.handleSubmit}/> ):
+            ( <FlagAnswer 
+               correct={questionState === QuestionStates.ANSWER_CORRECT}
+               answer={answerText}/> );
 
-        let output = (
-            <FlagChoices options={options}/>
-        );
         return (
             <div>
-                <h1>{answerText}</h1>
                 {output}
                 <img
                     className="flag-img"
