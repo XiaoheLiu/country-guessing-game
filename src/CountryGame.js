@@ -14,6 +14,7 @@ class CountryGame extends Component {
         }
 
         this.onGuess = this.onGuess.bind(this);
+        this.onNext = this.onNext.bind(this);
     }
 
     componentDidMount() {
@@ -38,6 +39,17 @@ class CountryGame extends Component {
                             QuestionStates.ANSWER_CORRECT :
                             QuestionStates.ANSWER_WRONG;
         this.setState({questionState});
+    }
+
+    onNext() {
+        const {countries} = this.state;
+        const correctOption = Math.floor(Math.random() * countries.length);
+        const options = this._getOptions(correctOption, countries);
+        this.setState({
+            correctOption,
+            options,
+            questionState: QuestionStates.QUESTION
+        });
     }
 
     _getOptions(correctOption, countries) {
@@ -74,6 +86,7 @@ class CountryGame extends Component {
                     options={opts}
                     questionState={questionState}
                     onGuess={this.onGuess}
+                    onNext={this.onNext}
                 />
             );
         }

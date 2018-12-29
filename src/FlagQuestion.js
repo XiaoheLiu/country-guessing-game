@@ -39,7 +39,7 @@ class FlagQuestion extends Component {
             questionState,
             options,
             answerText,
-            // onNext
+            onNext
         } = this.props;
         const {userChoice} = this.state;
         let opts = options.map(opt => ({
@@ -52,7 +52,8 @@ class FlagQuestion extends Component {
                            handleSubmit={this.handleSubmit}/> ):
             ( <FlagAnswer 
                correct={questionState === QuestionStates.ANSWER_CORRECT}
-               answer={answerText}/> );
+               answer={answerText}
+               onNext={onNext} /> );
 
         return (
             <div>
